@@ -24,9 +24,12 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage){
         primaryStage.setTitle("War Above Us");
+
+        //Dynamiczna wielkość ekranu
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         wWidth = dimension.width / 1.2d; // window width
         wHeight = dimension.height / 1.2d; // window height
+
         Pane pane = new Pane();
         Scene scene = new Scene(pane, wWidth, wHeight);
 
