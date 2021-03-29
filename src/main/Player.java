@@ -1,11 +1,11 @@
 package main;
 
 public class Player extends InteractiveGraphicThing {
+    ImageOfObject imageOfPlayer;
 
-
-    public Player(){
-        setImage("images/plane.png");
-        setImageView();
+    public Player(ImageOfObject imageOfObject){
+        this.imageOfPlayer = imageOfObject;
+        setImageView(imageOfPlayer.getImage());
         setStartingPosition();
     }
 
