@@ -1,10 +1,12 @@
 package main;
 
+import background.GameBackground;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import obstacles.Bombs;
@@ -14,7 +16,6 @@ import java.util.Random;
 
 
 public class Game extends Application {
-    private String[] args;
     private static double wWidth;
     private static double wHeight;
     private Player player;
@@ -36,12 +37,18 @@ public class Game extends Application {
         Pane pane = new Pane();
         Scene scene = new Scene(pane, wWidth, wHeight);
 
-        ImageOfObject imageOfPlayer = new ImageOfObject("images/303Division.png");
-        player = new Player(imageOfPlayer);
-        pane.getChildren().add(player.getImageView());
+        GameBackground gameBackground = new GameBackground();
+        ImageOfObject imageOfBackground = new ImageOfObject("images/underlay background.jpg");
+        gameBackground.addImage(imageOfBackground);
+        gameBackground.setBackgroundImageView(0);
+        pane.getChildren().add(gameBackground.getImageView());
 
         Bombs bombs = new Bombs();
         bombs.addImageOfBomb("images/Plane Bomb.png");
+
+        ImageOfObject imageOfPlayer = new ImageOfObject("images/303Division.png");
+        player = new Player(imageOfPlayer);
+        pane.getChildren().add(player.getImageView());
 
         random = new Random();
 
