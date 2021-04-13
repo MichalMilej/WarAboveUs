@@ -9,66 +9,55 @@ import main.Player;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Bombs {
-    private ArrayList<ImageOfObject> imagesOfBombs = new ArrayList<>();
-    private LinkedList<Bomb> bombs = new LinkedList<>();
+public class Bombs extends Obstacles {
 
-    public void addImageOfBomb(String path){
-        imagesOfBombs.add(new ImageOfObject(path));
-    }
-
-    public void addBomb(double x, double y, int imageId, MovingVector movingVector){
-        bombs.add(new Bomb(x, y, imagesOfBombs.get(imageId), movingVector));
-    }
-
-    public LinkedList<Bomb> getBombs() {
-        return bombs;
-    }
-
-    public void moveBombs(double fallingSpeed, double leftOrRightSpeed, Pane pane){
+    public void checkCollisions(Player player, EnemyPlanes enemyPlanes, Pane pane){
         double x, y;
-        for (int i = 0; i < bombs.size(); i++){
-            x = 0; y = 0;
-            if (bombs.get(i).getMovingVector().down)
-                y = fallingSpeed;
-            if (bombs.get(i).getMovingVector().left)
-                x = -leftOrRightSpeed;
-            else if (bombs.get(i).getMovingVector().right)
-                x = leftOrRightSpeed;
-
-            bombs.get(i).setImageViewPosition(bombs.get(i).getImageView().getX() + x,
-                    bombs.get(i).getImageView().getY() + y);
-
-            if (bombs.get(i).getImageView().getX() + bombs.get(i).getImageView().getImage().getWidth() < 0 ||
-                    bombs.get(i).getImageView().getX() > Game.getwWidth() ||
-                    bombs.get(i).getImageView().getY() > Game.getwHeight()) {
-                pane.getChildren().remove(bombs.get(i).getImageView());
-                bombs.remove(i);
-                continue;
-            }
-        }
-    }
-
-    public void checkCollisions(Player player, Pane pane){
-        double x, y;
-        for (int i = 0; i < bombs.size(); i++){
+        for (int i = 0; i < objectsOfObstacles.size(); i++){
             for (int j = 0; j < 3; j++) {
                 if (j == 0) { //First hitbox
-                    x = bombs.get(i).getImageView().getX() + bombs.get(i).getImageView().getImage().getWidth() / 2;
-                    y = bombs.get(i).getImageView().getY() + bombs.get(i).getImageView().getImage().getHeight();
+                    x = objectsOfObstacles.get(i).getImageView().getX() +
+                            objectsOfObstacles.get(i).getImageView().getImage().getWidth() / 2;
+                    y = objectsOfObstacles.get(i).getImageView().getY() +
+                            objectsOfObstacles.get(i).getImageView().getImage().getHeight();
                 } else if (j == 1){ // Second hitbox
-                    x = bombs.get(i).getImageView().getX() + bombs.get(i).getImageView().getImage().getWidth() / 2;
-                    y = bombs.get(i).getImageView().getY() + bombs.get(i).getImageView().getImage().getHeight() / 2;
+                    x = objectsOfObstacles.get(i).getImageView().getX() +
+                            objectsOfObstacles.get(i).getImageView().getImage().getWidth() / 2;
+                    y = objectsOfObstacles.get(i).getImageView().getY() +
+                            objectsOfObstacles.get(i).getImageView().getImage().getHeight() / 2;
                 } else { // Third hitbox
-                    x = bombs.get(i).getImageView().getX() + bombs.get(i).getImageView().getImage().getWidth() / 2;
-                    y = bombs.get(i).getImageView().getY();
+                    x = objectsOfObstacles.get(i).getImageView().getX() +
+                            objectsOfObstacles.get(i).getImageView().getImage().getWidth() / 2;
+                    y = objectsOfObstacles.get(i).getImageView().getY();
                 }
+
+                // Collisions with enemy planes
+                boolean isCollision = false;
+                for (int k = 0; k < enemyPlanes.getObjectsOfObstacles().size(); k++){
+                    if (    x >= enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getX() &&
+                            x <= enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getX()
+                                    + enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getImage().getWidth() &&
+                            y >= enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getY() &&
+                            y <= enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getY() +
+                                    enemyPlanes.getObjectsOfObstacles().get(k).getImageView().getImage().getHeight()){
+                        pane.getChildren().remove(objectsOfObstacles.get(i).getImageView());
+                        objectsOfObstacles.remove(i);
+                        pane.getChildren().remove(enemyPlanes.getObjectsOfObstacles().get(k).getImageView());
+                        enemyPlanes.getObjectsOfObstacles().remove(k);
+                        isCollision = true;
+                        break;
+                    }
+                }
+                if (isCollision)
+                    break;
+
+                // Collisions with player
                 if (x >= player.getImageView().getX() &&
                         x <= player.getImageView().getX() + player.getImageView().getImage().getWidth() &&
                         y >= player.getImageView().getY() &&
                         y <= player.getImageView().getY() + player.getImageView().getImage().getHeight()){
-                    pane.getChildren().remove(bombs.get(i).getImageView());
-                    bombs.remove(i);
+                    pane.getChildren().remove(objectsOfObstacles.get(i).getImageView());
+                    objectsOfObstacles.remove(i);
                     break;
                 }
             }

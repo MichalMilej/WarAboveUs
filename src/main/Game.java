@@ -6,10 +6,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import obstacles.Bombs;
+import obstacles.EnemyPlanes;
+import obstacles.Obstacles;
 
 import java.awt.*;
 import java.util.Random;
@@ -43,28 +44,40 @@ public class Game extends Application {
         gameBackground.setBackgroundImageView(0);
         pane.getChildren().add(gameBackground.getImageView());
 
-        Bombs bombs = new Bombs();
-        bombs.addImageOfBomb("images/Plane Bomb.png");
-
         ImageOfObject imageOfPlayer = new ImageOfObject("images/303Division.png");
         player = new Player(imageOfPlayer);
         pane.getChildren().add(player.getImageView());
 
+        Bombs bombs = new Bombs();
+        bombs.addImageOfObstacle("images/Plane Bomb.png");
+
+        EnemyPlanes enemyPlanes = new EnemyPlanes();
+        enemyPlanes.addImageOfObstacle("images/Enemy plane 1.png");
+
         random = new Random();
 
-        for (int i = 0; i < 10; i++) {
-            bombs.addBomb(random.nextInt((int)wWidth), -100,
+        for (int i = 0; i < 5; i++) {
+            bombs.addObstacle(random.nextInt((int)wWidth), -100,
                     0, new MovingVector(false, false, false, true));
-            pane.getChildren().add(bombs.getBombs().getLast().getImageView());
+            pane.getChildren().add(bombs.getObjectsOfObstacles().getLast().getImageView());
         }
+        enemyPlanes.addObstacle(wWidth * 0.8,
+                random.nextInt((int) (100 + wHeight - 100) ),
+                0,
+                new MovingVector(true, false, false, false)
+                );
+        pane.getChildren().add(enemyPlanes.getObjectsOfObstacles().getLast().getImageView());
+
         //Game Loop
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 checkUserInput(scene);
                 player.move();
-                bombs.moveBombs(wHeight / 200, 0, pane);
-                bombs.checkCollisions(player, pane);
+                bombs.moveObstacles(wHeight / 200, 0, pane);
+                bombs.checkCollisions(player, enemyPlanes, pane);
+                enemyPlanes.moveObstacles(wHeight / 400, wWidth / 300, pane);
+                enemyPlanes.checkCollisions(player, pane);
             }
         };
         timer.start();
