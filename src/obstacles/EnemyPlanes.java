@@ -1,11 +1,12 @@
 package obstacles;
 
 import javafx.scene.layout.Pane;
-import main.MovingVector;
 import main.Player;
-import utilities.Vector;
 
 public class EnemyPlanes extends Obstacles {
+    public EnemyPlanes(){
+        addImageOfObstacle("images/Enemy plane 1.png");
+    }
 
     public void checkCollisions(Player player, Pane pane) { // With player
 

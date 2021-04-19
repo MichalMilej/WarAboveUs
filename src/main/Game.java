@@ -10,7 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import obstacles.Bombs;
 import obstacles.EnemyPlanes;
-import obstacles.Obstacles;
+import obstacles.Missiles;
 
 import java.awt.*;
 import java.util.Random;
@@ -30,7 +30,6 @@ public class Game extends Application {
     public void start(Stage primaryStage){
         primaryStage.setTitle("War Above Us");
 
-        //Dynamiczna wielkość ekranu
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         wWidth = dimension.width / 1.2d; // window width
         wHeight = dimension.height / 1.2d; // window height
@@ -38,21 +37,15 @@ public class Game extends Application {
         Pane pane = new Pane();
         Scene scene = new Scene(pane, wWidth, wHeight);
 
-        GameBackground gameBackground = new GameBackground();
-        ImageOfObject imageOfBackground = new ImageOfObject("images/underlay background.jpg");
-        gameBackground.addImage(imageOfBackground);
-        gameBackground.setBackgroundImageView(0);
-        pane.getChildren().add(gameBackground.getImageView());
+        GameBackground gameBackground = new GameBackground(0, 0);
+        gameBackground.addToPane(pane);
 
-        ImageOfObject imageOfPlayer = new ImageOfObject("images/303Division.png");
-        player = new Player(imageOfPlayer);
-        pane.getChildren().add(player.getImageView());
+        player = new Player(0, 5);
+        player.addPlayerToPane(pane);
 
         Bombs bombs = new Bombs();
-        bombs.addImageOfObstacle("images/Plane Bomb.png");
-
         EnemyPlanes enemyPlanes = new EnemyPlanes();
-        enemyPlanes.addImageOfObstacle("images/Enemy plane 1.png");
+        Missiles missiles = new Missiles();
 
         random = new Random();
 
@@ -61,20 +54,29 @@ public class Game extends Application {
                     0, new MovingVector(false, false, false, true));
             pane.getChildren().add(bombs.getObjectsOfObstacles().getLast().getImageView());
         }
-        enemyPlanes.addObstacle(wWidth * 0.8,
-                random.nextInt((int) (100 + wHeight - 100) ),
-                0,
-                new MovingVector(true, false, false, false)
-                );
-        pane.getChildren().add(enemyPlanes.getObjectsOfObstacles().getLast().getImageView());
+        for (int i = 0; i < 3; i++) {
+            enemyPlanes.addObstacle(wWidth * 0.8,
+                    random.nextInt((int) (wHeight - 100)),
+                    0,
+                    new MovingVector(true, false, false, false)
+            );
+            pane.getChildren().add(enemyPlanes.getObjectsOfObstacles().getLast().getImageView());
+        }
 
         //Game Loop
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 checkUserInput(scene);
+                gameBackground.moveGameBackground(2, 0);
                 player.move();
-                bombs.moveObstacles(wHeight / 200, 0, pane);
+                if (player.isReleaseMissilePressed() && player.getAmmunition() > 0) {
+                    player.releaseMissile(missiles, pane);
+                    player.setReleaseMissilePressed(false);
+                }
+                missiles.moveObstacles(wHeight / 400, wWidth / 250, pane);
+                missiles.checkCollisions(bombs, enemyPlanes, pane);
+                bombs.moveObstacles(wHeight / 400, 0, pane);
                 bombs.checkCollisions(player, enemyPlanes, pane);
                 enemyPlanes.moveObstacles(wHeight / 400, wWidth / 300, pane);
                 enemyPlanes.checkCollisions(player, pane);
@@ -107,7 +109,9 @@ public class Game extends Application {
                 player.getMovingVector().left = false;
             if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT)
                 player.getMovingVector().right = false;
-        });
+            if (event.getCode() == KeyCode.SPACE)
+                player.setReleaseMissilePressed(true);
+    });
     }
 
     private void setOnCloseRequest(Stage stage){

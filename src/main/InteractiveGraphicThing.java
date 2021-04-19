@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class InteractiveGraphicThing {
-    private ImageView imageView;
+    private ImageView imageView = new ImageView();
     private MovingVector movingVector;
     private int imageId;
 
@@ -13,7 +13,7 @@ public class InteractiveGraphicThing {
     }
 
     public void setImageView(Image image){
-        imageView = new ImageView(image);
+        imageView.setImage(image);
     }
 
     public ImageView getImageView(){

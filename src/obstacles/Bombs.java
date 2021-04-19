@@ -1,15 +1,12 @@
 package obstacles;
 
 import javafx.scene.layout.Pane;
-import main.Game;
-import main.ImageOfObject;
-import main.MovingVector;
 import main.Player;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 public class Bombs extends Obstacles {
+    public Bombs(){
+        addImageOfObstacle("images/Plane Bomb.png");
+    }
 
     public void checkCollisions(Player player, EnemyPlanes enemyPlanes, Pane pane){
         double x, y;

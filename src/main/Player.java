@@ -1,12 +1,27 @@
 package main;
 
-public class Player extends InteractiveGraphicThing {
-    ImageOfObject imageOfPlayer;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import obstacles.Missiles;
 
-    public Player(ImageOfObject imageOfObject){
-        this.imageOfPlayer = imageOfObject;
+public class Player extends InteractiveGraphicThing {
+    private ImageOfObject imageOfPlayer;
+    private int ammunition;
+    private Label ammunitionValueLabel;
+    private boolean releaseMissilePressed;
+
+    public Player(int playerImageIndex, int ammunition){
+        if (playerImageIndex == 0)
+            imageOfPlayer = new ImageOfObject("images/303Division.png");
+
+        this.ammunition = ammunition;
+        releaseMissilePressed = false;
         setImageView(imageOfPlayer.getImage());
         setStartingPosition();
+    }
+
+    public void addPlayerToPane(Pane pane){
+        pane.getChildren().add(getImageView());
     }
 
     public void setStartingPosition(){
@@ -31,6 +46,18 @@ public class Player extends InteractiveGraphicThing {
         setImageViewPosition(getImageView().getX() + x, getImageView().getY() + y);
     }
 
+    public void releaseMissile(Missiles missiles, Pane pane){
+        double x = getImageView().getX() + getImageView().getImage().getWidth();
+        double y = getImageView().getY() + getImageView().getImage().getHeight() - getImageView().getImage().getHeight() / 10;
+
+        missiles.addObstacle(x, y, 0,
+                new MovingVector(false, true, false, false));
+
+        pane.getChildren().add(missiles.getObjectsOfObstacles().getLast().getImageView());
+
+        ammunition--;
+    }
+
     private boolean isPossible(double x, double y){
         if (getImageView().getX() + x < 0 // Left edge
                 || getImageView().getX() + getImageView().getImage().getWidth() + x > Game.getwWidth()) // Right edge
@@ -41,5 +68,21 @@ public class Player extends InteractiveGraphicThing {
             return false;
 
         return true;
+    }
+
+    public void setAmmunition(int ammunition) {
+        this.ammunition = ammunition;
+    }
+
+    public int getAmmunition() {
+        return ammunition;
+    }
+
+    public boolean isReleaseMissilePressed() {
+        return releaseMissilePressed;
+    }
+
+    public void setReleaseMissilePressed(boolean releaseMissilePressed){
+        this.releaseMissilePressed = releaseMissilePressed;
     }
 }
