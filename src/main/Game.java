@@ -40,27 +40,29 @@ public class Game extends Application {
         GameBackground gameBackground = new GameBackground(0, 0);
         gameBackground.addToPane(pane);
 
-        player = new Player(0, 5);
-        player.addPlayerToPane(pane);
-
         Bombs bombs = new Bombs();
         EnemyPlanes enemyPlanes = new EnemyPlanes();
         Missiles missiles = new Missiles();
 
+        player = new Player(0, missiles, 5);
+        player.addPlayerToPane(pane);
+        player.addAmmunitionNumberDisplayToPane(pane);
+
         random = new Random();
 
-        for (int i = 0; i < 5; i++) {
-            bombs.addObstacle(random.nextInt((int)wWidth), -100,
+        for (int i = 0; i < 4; i++) {
+            bombs.addObstacle(random.nextInt((int)wWidth / 2), -100,
                     0, new MovingVector(false, false, false, true));
             pane.getChildren().add(bombs.getObjectsOfObstacles().getLast().getImageView());
         }
         for (int i = 0; i < 3; i++) {
-            enemyPlanes.addObstacle(wWidth * 0.8,
+            enemyPlanes.addObstacle(wWidth,
                     random.nextInt((int) (wHeight - 100)),
                     0,
                     new MovingVector(true, false, false, false)
             );
             pane.getChildren().add(enemyPlanes.getObjectsOfObstacles().getLast().getImageView());
+            enemyPlanes.releaseMissile(missiles, i, new MovingVector(true, false, false, false), pane);
         }
 
         //Game Loop
@@ -68,17 +70,17 @@ public class Game extends Application {
             @Override
             public void handle(long now) {
                 checkUserInput(scene);
-                gameBackground.moveGameBackground(2, 0);
+                gameBackground.moveGameBackground(getwWidth() / 800, 0);
                 player.move();
                 if (player.isReleaseMissilePressed() && player.getAmmunition() > 0) {
                     player.releaseMissile(missiles, pane);
                     player.setReleaseMissilePressed(false);
                 }
                 missiles.moveObstacles(wHeight / 400, wWidth / 250, pane);
-                missiles.checkCollisions(bombs, enemyPlanes, pane);
+                enemyPlanes.moveObstacles(wHeight / 400, wWidth / 300, pane);
+                missiles.checkCollisions(bombs, enemyPlanes, player, pane);
                 bombs.moveObstacles(wHeight / 400, 0, pane);
                 bombs.checkCollisions(player, enemyPlanes, pane);
-                enemyPlanes.moveObstacles(wHeight / 400, wWidth / 300, pane);
                 enemyPlanes.checkCollisions(player, pane);
             }
         };

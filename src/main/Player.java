@@ -1,20 +1,27 @@
 package main;
 
-import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import obstacles.Missiles;
+
+import java.util.ArrayList;
 
 public class Player extends InteractiveGraphicThing {
     private ImageOfObject imageOfPlayer;
     private int ammunition;
-    private Label ammunitionValueLabel;
+    private ArrayList<ImageView> ammunitionNumberDisplay = new ArrayList<>();
     private boolean releaseMissilePressed;
 
-    public Player(int playerImageIndex, int ammunition){
+    public Player(int playerImageIndex, Missiles missiles, int ammunition){
         if (playerImageIndex == 0)
             imageOfPlayer = new ImageOfObject("images/303Division.png");
 
         this.ammunition = ammunition;
+        // Preparing Graphical display of ammunition number
+        for (int i = 0; i < ammunition; i++){
+            createMissileImageView(missiles);
+        }
+
         releaseMissilePressed = false;
         setImageView(imageOfPlayer.getImage());
         setStartingPosition();
@@ -22,6 +29,22 @@ public class Player extends InteractiveGraphicThing {
 
     public void addPlayerToPane(Pane pane){
         pane.getChildren().add(getImageView());
+    }
+
+    public void addAmmunitionNumberDisplayToPane(Pane pane){
+        for (int i = 0; i < ammunitionNumberDisplay.size(); i++)
+            pane.getChildren().add(ammunitionNumberDisplay.get(i));
+    }
+
+    private void createMissileImageView(Missiles missiles){
+        ammunitionNumberDisplay.add(new ImageView(missiles.getImagesOfObstacles().get(0).getImage()));
+        int index = ammunitionNumberDisplay.size() - 1;
+        if (index == 0)
+            ammunitionNumberDisplay.get(index).setX(Game.getwWidth() / 30);
+        else
+            ammunitionNumberDisplay.get(index).setX(ammunitionNumberDisplay.get(index-1).getX() + Game.getwWidth() / 60);
+        ammunitionNumberDisplay.get(index).setY(
+                Game.getwHeight() - Game.getwHeight() / 25 - ammunitionNumberDisplay.get(index).getImage().getHeight());
     }
 
     public void setStartingPosition(){
@@ -50,10 +73,13 @@ public class Player extends InteractiveGraphicThing {
         double x = getImageView().getX() + getImageView().getImage().getWidth();
         double y = getImageView().getY() + getImageView().getImage().getHeight() - getImageView().getImage().getHeight() / 10;
 
-        missiles.addObstacle(x, y, 0,
+        missiles.addObstacle(x, y, 1,
                 new MovingVector(false, true, false, false));
 
         pane.getChildren().add(missiles.getObjectsOfObstacles().getLast().getImageView());
+
+        pane.getChildren().remove(ammunitionNumberDisplay.get(ammunitionNumberDisplay.size() - 1));
+        ammunitionNumberDisplay.remove(ammunitionNumberDisplay.size() - 1);
 
         ammunition--;
     }

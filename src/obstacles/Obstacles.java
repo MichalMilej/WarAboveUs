@@ -18,6 +18,8 @@ public abstract class Obstacles {
             x = 0; y = 0;
             if (objectsOfObstacles.get(i).getMovingVector().down)
                 y = verticalSpeed;
+            else if (objectsOfObstacles.get(i).getMovingVector().up)
+                y = -verticalSpeed;
             if (objectsOfObstacles.get(i).getMovingVector().left)
                 x = -horizontalSpeed;
             else if (objectsOfObstacles.get(i).getMovingVector().right)

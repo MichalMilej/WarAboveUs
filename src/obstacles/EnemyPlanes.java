@@ -1,6 +1,7 @@
 package obstacles;
 
 import javafx.scene.layout.Pane;
+import main.MovingVector;
 import main.Player;
 
 public class EnemyPlanes extends Obstacles {
@@ -41,5 +42,17 @@ public class EnemyPlanes extends Obstacles {
                 }
             }
         }
+    }
+
+    public void releaseMissile(Missiles missiles, int planeIndex, MovingVector movingVector, Pane pane){
+        Obstacle enemyPlane = getObjectsOfObstacles().get(planeIndex);
+        double x = enemyPlane.getImageView().getX() - missiles.getImagesOfObstacles().get(2).getImage().getWidth() * 3;
+        double y = enemyPlane.getImageView().getY() +
+                enemyPlane.getImageView().getImage().getHeight() -
+                enemyPlane.getImageView().getImage().getHeight() / 10;
+
+        missiles.addObstacle(x, y, 2, movingVector);
+
+        pane.getChildren().add(missiles.getObjectsOfObstacles().getLast().getImageView());
     }
 }

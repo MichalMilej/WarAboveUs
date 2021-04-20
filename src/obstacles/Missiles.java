@@ -1,13 +1,16 @@
 package obstacles;
 
 import javafx.scene.layout.Pane;
+import main.Player;
 
 public class Missiles extends Obstacles {
     public Missiles(){
-        addImageOfObstacle("images/Anti-aircraft Missile 1.png");
+        addImageOfObstacle("images/Anti-aircraft Missile 1 up.png");
+        addImageOfObstacle("images/Anti-aircraft Missile 1 right.png");
+        addImageOfObstacle("images/Nazi missile 1.png");
     }
 
-    public void checkCollisions(Bombs bombs, EnemyPlanes enemyPlanes, Pane pane){
+    public void checkCollisions(Bombs bombs, EnemyPlanes enemyPlanes, Player player, Pane pane){
         double x, y;
         double multiply = 0.3;
         boolean targetHit;
@@ -32,17 +35,34 @@ public class Missiles extends Obstacles {
                             (objectsOfObstacles.get(i).getImageView().getImage().getHeight() * 2) / 3;
                 }
 
+                // Checking collisions with player
+                if (    x >= player.getImageView().getX() &&
+                        x <= player.getImageView().getX() + player.getImageView().getImage().getWidth() &&
+                        y >= player.getImageView().getY() &&
+                        y <= player.getImageView().getY() + player.getImageView().getImage().getHeight()) {
+                    pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
+                    getObjectsOfObstacles().remove(i);
+                    targetHit = true;
+                }
+
+
                 // Checking collisions with enemy planes
-                for (int k = 0; k < enemyPlanes.getObjectsOfObstacles().size(); k++){
-                    Obstacle enemyPlane = enemyPlanes.getObjectsOfObstacles().get(k);
-                    if (x >= enemyPlane.getImageView().getX() &&
-                            x <= enemyPlane.getImageView().getX() + enemyPlane.getImageView().getImage().getWidth() &&
-                            y >= enemyPlane.getImageView().getY() &&
-                            y <= enemyPlane.getImageView().getY() + enemyPlane.getImageView().getImage().getHeight()){
-                        pane.getChildren().remove(enemyPlane.getImageView());
-                        enemyPlanes.getObjectsOfObstacles().remove(k);
-                        targetHit = true;
-                        break;
+                if (!targetHit) {
+                    for (int k = 0; k < enemyPlanes.getObjectsOfObstacles().size(); k++) {
+                        Obstacle enemyPlane = enemyPlanes.getObjectsOfObstacles().get(k);
+                        if (x >= enemyPlane.getImageView().getX() &&
+                                x <= enemyPlane.getImageView().getX() + enemyPlane.getImageView().getImage().getWidth() &&
+                                y >= enemyPlane.getImageView().getY() &&
+                                y <= enemyPlane.getImageView().getY() + enemyPlane.getImageView().getImage().getHeight()) {
+                            // Remove from GUI
+                            pane.getChildren().remove(enemyPlane.getImageView());
+                            pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
+                            // Remove from array
+                            enemyPlanes.getObjectsOfObstacles().remove(k);
+                            getObjectsOfObstacles().remove(i);
+                            targetHit = true;
+                            break;
+                        }
                     }
                 }
                 // Checking collisions with bombs
@@ -53,21 +73,41 @@ public class Missiles extends Obstacles {
                                 x <= bomb.getImageView().getX() + bomb.getImageView().getImage().getWidth() &&
                                 y >= bomb.getImageView().getY() &&
                                 y <= bomb.getImageView().getY() + bomb.getImageView().getImage().getHeight()){
+                            // Remove from GUI
                             pane.getChildren().remove(bomb.getImageView());
+                            pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
+                            // Remove from array
                             bombs.getObjectsOfObstacles().remove(k);
+                            getObjectsOfObstacles().remove(i);
                             targetHit = true;
                             break;
                         }
                     }
                 }
-                if (targetHit){
-                    pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
-                    getObjectsOfObstacles().remove(i);
-                    break;
+                // Checking collisions with other missiles
+                if (!targetHit){
+                    for (int k = 0; k < getObjectsOfObstacles().size(); k++){
+                        if (k != i) {
+                            Obstacle missile = getObjectsOfObstacles().get(k);
+                            if (    x >= missile.getImageView().getX() &&
+                                    x <= missile.getImageView().getX() + missile.getImageView().getImage().getWidth() &&
+                                    y >= missile.getImageView().getY() &&
+                                    y <= missile.getImageView().getY() + missile.getImageView().getImage().getHeight()) {
+                                // Remove from GUI
+                                pane.getChildren().remove(missile.getImageView());
+                                pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
+                                // Remove from array
+                                getObjectsOfObstacles().remove(i);
+                                getObjectsOfObstacles().remove(missile);
+                                targetHit = true;
+                                break;
+                            }
+                        }
+                    }
                 }
-
+                if (targetHit)
+                    break;
             }
-
         }
     }
 }
