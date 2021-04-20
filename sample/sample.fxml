@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #708090;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="225.0" mnemonicParsing="false" onAction="#playSound" prefHeight="75.0" prefWidth="400.0" text="Music: ON">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="130.0" mnemonicParsing="false" onAction="#playGame" prefHeight="75.0" prefWidth="400.0" style="-fx-background-color: #00000;" text="Play">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="320.0" mnemonicParsing="false" onAction="#stopSound" prefHeight="75.0" prefWidth="400.0" text="Music: OFF">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="415.0" mnemonicParsing="false" onAction="#showScoreboards" prefHeight="75.0" prefWidth="400.0" text="Scoreboards">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <ImageView fitHeight="100.0" fitWidth="720.0" layoutX="120.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@xWwC1617097464.png" />
+         </image>
+      </ImageView>
+      <Slider fx:id="volumeSlider" layoutX="410.0" layoutY="505.0" />
+      <ImageView fitHeight="47.0" fitWidth="49.0" layoutX="349.0" layoutY="491.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@1024px-Speaker_Icon.svg.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
