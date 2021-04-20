@@ -12,7 +12,7 @@ public class GameBackground{
     private ImageViewBackground nextBackground = new ImageViewBackground();
 
     public GameBackground(int firstBackgroundIndex, int secondBackgroundIndex){
-        ImageOfObject imageOfBackground = new ImageOfObject("images/underlay background.jpg");
+        ImageOfObject imageOfBackground = new ImageOfObject("images/backgrounds/underlay background.jpg");
         addImage(imageOfBackground);
 
         currentBackground.setImageView(imagesOfBackgrounds.get(firstBackgroundIndex).getImage());

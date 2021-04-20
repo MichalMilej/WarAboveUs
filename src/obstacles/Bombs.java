@@ -5,7 +5,7 @@ import main.Player;
 
 public class Bombs extends Obstacles {
     public Bombs(){
-        addImageOfObstacle("images/Plane Bomb.png");
+        addImageOfObstacle("images/bombs/bomb 1.png");
     }
 
     public void checkCollisions(Player player, EnemyPlanes enemyPlanes, Pane pane){

@@ -5,9 +5,9 @@ import main.Player;
 
 public class Missiles extends Obstacles {
     public Missiles(){
-        addImageOfObstacle("images/Anti-aircraft Missile 1 up.png");
-        addImageOfObstacle("images/Anti-aircraft Missile 1 right.png");
-        addImageOfObstacle("images/Nazi missile 1.png");
+        addImageOfObstacle("images/missiles/Anti-aircraft Missile 1 up.png");
+        addImageOfObstacle("images/missiles/Anti-aircraft Missile 1 right.png");
+        addImageOfObstacle("images/missiles/Nazi missile 1.png");
     }
 
     public void checkCollisions(Bombs bombs, EnemyPlanes enemyPlanes, Player player, Pane pane){

@@ -6,7 +6,7 @@ import main.Player;
 
 public class EnemyPlanes extends Obstacles {
     public EnemyPlanes(){
-        addImageOfObstacle("images/Enemy plane 1.png");
+        addImageOfObstacle("images/planes/Enemy plane 1.png");
     }
 
     public void checkCollisions(Player player, Pane pane) { // With player

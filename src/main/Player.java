@@ -14,7 +14,7 @@ public class Player extends InteractiveGraphicThing {
 
     public Player(int playerImageIndex, Missiles missiles, int ammunition){
         if (playerImageIndex == 0)
-            imageOfPlayer = new ImageOfObject("images/303Division.png");
+            imageOfPlayer = new ImageOfObject("images/planes/303Division.png");
 
         this.ammunition = ammunition;
         // Preparing Graphical display of ammunition number
