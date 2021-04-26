@@ -7,6 +7,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$FX11$" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$FX11$" />
+        </SOURCES>
+        <jarDirectory url="file://$FX11$" recursive="false" />
+        <jarDirectory url="file://$FX11$" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="lib" level="application" />
   </component>
 </module>
-

@@ -2,37 +2,28 @@ package main;
 
 import background.GameBackground;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import obstacles.Bombs;
 import obstacles.EnemyPlanes;
 import obstacles.Missiles;
 
-import java.awt.*;
 import java.util.Random;
 
 
-public class Game extends Application {
+public class Game {
     private static double wWidth;
     private static double wHeight;
     private Player player;
     private Random random;
 
-    public static void main(String[] args){
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage){
+    public void startGame(Stage primaryStage){
         primaryStage.setTitle("War Above Us");
-
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        wWidth = dimension.width / 1.2d; // window width
-        wHeight = dimension.height / 1.2d; // window height
+        wWidth = 1480f; // window width
+        wHeight = 900f; // window height
 
         Pane pane = new Pane();
         Scene scene = new Scene(pane, wWidth, wHeight);
@@ -87,8 +78,8 @@ public class Game extends Application {
         timer.start();
 
         primaryStage.setScene(scene);
-        setOnCloseRequest(primaryStage);
         primaryStage.show();
+        primaryStage.centerOnScreen();
     }
 
     private void checkUserInput(Scene scene){
@@ -113,13 +104,6 @@ public class Game extends Application {
                 player.getMovingVector().right = false;
             if (event.getCode() == KeyCode.SPACE)
                 player.setReleaseMissilePressed(true);
-    });
-    }
-
-    private void setOnCloseRequest(Stage stage){
-        stage.setOnCloseRequest((t) -> {
-                Platform.exit();
-                System.exit(0);
         });
     }
 
