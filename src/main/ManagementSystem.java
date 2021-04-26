@@ -23,6 +23,7 @@ public class ManagementSystem extends Application{
         musicMediaPlayer.setVolume(0.5);
         musicMediaPlayer.play();
 
+        primaryStage.setResizable(false);
         Menu menu = new Menu();
         menu.showMenu(primaryStage);
 
