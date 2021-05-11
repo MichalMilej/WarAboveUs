@@ -6,7 +6,8 @@ import javafx.scene.image.ImageView;
 public class InteractiveGraphicThing {
     private ImageView imageView = new ImageView();
     private MovingVector movingVector;
-    private int imageId;
+    private double horizontalSpeed;
+    private double verticalSpeed;
 
     public InteractiveGraphicThing(){
         movingVector = new MovingVector(false, false, false, false);
@@ -33,11 +34,19 @@ public class InteractiveGraphicThing {
         return movingVector;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public double getHorizontalSpeed() {
+        return horizontalSpeed;
     }
 
-    public int getImageId() {
-        return imageId;
+    public void setHorizontalSpeed(double horizontalSpeed) {
+        this.horizontalSpeed = horizontalSpeed;
+    }
+
+    public double getVerticalSpeed() {
+        return verticalSpeed;
+    }
+
+    public void setVerticalSpeed(double verticalSpeed) {
+        this.verticalSpeed = verticalSpeed;
     }
 }

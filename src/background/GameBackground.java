@@ -10,12 +10,20 @@ public class GameBackground{
     private ArrayList<ImageOfObject> imagesOfBackgrounds = new ArrayList<>();
     private ImageViewBackground currentBackground = new ImageViewBackground();
     private ImageViewBackground nextBackground = new ImageViewBackground();
+    private int currentBackgroundId;
+    private int nextBackgroundId;
+    private boolean nextBackgroundPrepared;
 
     public GameBackground(int firstBackgroundIndex, int secondBackgroundIndex){
-        ImageOfObject imageOfBackground = new ImageOfObject("images/backgrounds/underlay background.jpg");
-        addImage(imageOfBackground);
+        addImage(new ImageOfObject("images/backgrounds/day background.png"));
+        addImage(new ImageOfObject("images/backgrounds/evening background.png"));
+        addImage(new ImageOfObject("images/backgrounds/night background.png"));
+        addImage(new ImageOfObject("images/backgrounds/morning background.png"));
 
+        nextBackgroundPrepared = false;
+        currentBackgroundId = firstBackgroundIndex;
         currentBackground.setImageView(imagesOfBackgrounds.get(firstBackgroundIndex).getImage());
+        nextBackgroundId = secondBackgroundIndex;
         nextBackground.setImageView(imagesOfBackgrounds.get(secondBackgroundIndex).getImage());
         nextBackground.getImageView().setX(Game.getwWidth());
     }
@@ -29,18 +37,25 @@ public class GameBackground{
         imagesOfBackgrounds.add(imageOfObject);
     }
 
-    public void moveGameBackground(double value, int nextBackgroundIndex) {
+    public void moveGameBackground(double value) {
         currentBackground.getImageView().setX(currentBackground.getImageView().getX() - value);
         if (isNewPictureOn(currentBackground)) {
-            nextBackground.getImageView().setX(nextBackground.getImageView().getX() - value);
+            nextBackground.getImageView().setX(currentBackground.getImageView().getX()
+                    + currentBackground.getImageView().getImage().getWidth());
             if (nextBackground.getImageView().getX() <= 0) {
+                currentBackgroundId = nextBackgroundId;
                 currentBackground.setImageView(nextBackground.getImageView().getImage());
                 currentBackground.getImageView().setX(nextBackground.getImageView().getX());
-
-                nextBackground.setImageView(imagesOfBackgrounds.get(nextBackgroundIndex).getImage());
-                nextBackground.getImageView().setX(Game.getwWidth());
+                nextBackgroundPrepared = false;
             }
         }
+    }
+
+    public void prepareNextBackground(int nextBackgroundId){
+        this.nextBackgroundId = nextBackgroundId;
+        nextBackground.setImageView(imagesOfBackgrounds.get(nextBackgroundId).getImage());
+        nextBackground.getImageView().setX(Game.getwWidth());
+        nextBackgroundPrepared = true;
     }
 
     private boolean isNewPictureOn(ImageViewBackground imageViewBackground){
@@ -50,4 +65,11 @@ public class GameBackground{
         return false;
     }
 
+    public int getCurrentBackgroundId() {
+        return currentBackgroundId;
+    }
+
+    public boolean isNextBackgroundPrepared() {
+        return nextBackgroundPrepared;
+    }
 }

@@ -11,26 +11,22 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #708090;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fxml.ScoreboardController">
    <children>
-      <Button layoutX="280.0" layoutY="135.0" mnemonicParsing="false" onAction="#backToTheMainScene" prefHeight="75.0" prefWidth="400.0" text="Back">
+
+      <Text layoutX="405.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard" textAlignment="CENTER">
          <font>
-            <Font name="Berlin Sans FB" size="20.0" />
-         </font>
-      </Button>
-      <!--<ImageView fitHeight="100.0" fitWidth="720.0" layoutX="120.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="../../../images/Menu/Title.png" />
-         </image>
-      </ImageView>!-->
-      <Text layoutX="430.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard">
-         <font>
-            <Font name="Berlin Sans FB" size="20.0" />
+            <Font name="Berlin Sans FB" size="32.0" />
          </font>
       </Text>
-      <TableView layoutX="280.0" layoutY="270.0" prefHeight="200.0" prefWidth="400.0">
+      <TableView layoutX="280.0" layoutY="100.0" prefHeight="280.0" prefWidth="400.0">
         <columns>
           <TableColumn prefWidth="200.0" text="Player" />
           <TableColumn prefWidth="200.0" text="Score" />
         </columns>
       </TableView>
+       <Button layoutX="280.0" layoutY="400.0" mnemonicParsing="false" onAction="#backToTheMainScene" prefHeight="75.0" prefWidth="400.0" text="Back">
+           <font>
+               <Font name="Berlin Sans FB" size="20.0" />
+           </font>
+       </Button>
    </children>
 </AnchorPane>

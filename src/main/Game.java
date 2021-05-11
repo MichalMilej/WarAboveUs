@@ -1,15 +1,18 @@
 package main;
 
 import background.GameBackground;
+import generating.BombsComposition;
+import generating.GameGenerationSystem;
+import generating.PlanesComposition;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import obstacles.Bombs;
 import obstacles.EnemyPlanes;
 import obstacles.Missiles;
+import scores.DistanceCounter;
 
 import java.util.Random;
 
@@ -19,6 +22,7 @@ public class Game {
     private static double wHeight;
     private Player player;
     private Random random;
+    private boolean pause = false;
 
     public void startGame(Stage primaryStage){
         primaryStage.setTitle("War Above Us");
@@ -28,51 +32,45 @@ public class Game {
         Pane pane = new Pane();
         Scene scene = new Scene(pane, wWidth, wHeight);
 
-        GameBackground gameBackground = new GameBackground(0, 0);
+        GameBackground gameBackground = new GameBackground(0, 1);
         gameBackground.addToPane(pane);
 
         Bombs bombs = new Bombs();
         EnemyPlanes enemyPlanes = new EnemyPlanes();
         Missiles missiles = new Missiles();
 
-        player = new Player(0, missiles, 5);
+        player = new Player(0, missiles, 5, 3000, pane);
         player.addPlayerToPane(pane);
-        player.addAmmunitionNumberDisplayToPane(pane);
 
-        random = new Random();
+        DistanceCounter distanceCounter = new DistanceCounter(pane, missiles);
 
-        for (int i = 0; i < 4; i++) {
-            bombs.addObstacle(random.nextInt((int)wWidth / 2), -100,
-                    0, new MovingVector(false, false, false, true));
-            pane.getChildren().add(bombs.getObjectsOfObstacles().getLast().getImageView());
-        }
-        for (int i = 0; i < 3; i++) {
-            enemyPlanes.addObstacle(wWidth,
-                    random.nextInt((int) (wHeight - 100)),
-                    0,
-                    new MovingVector(true, false, false, false)
-            );
-            pane.getChildren().add(enemyPlanes.getObjectsOfObstacles().getLast().getImageView());
-            enemyPlanes.releaseMissile(missiles, i, new MovingVector(true, false, false, false), pane);
-        }
+        GameGenerationSystem gameGenerationSystem = new GameGenerationSystem(player, bombs, enemyPlanes, distanceCounter.getDistanceTravelled());
 
         //Game Loop
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                checkUserInput(scene);
-                gameBackground.moveGameBackground(getwWidth() / 800, 0);
-                player.move();
-                if (player.isReleaseMissilePressed() && player.getAmmunition() > 0) {
-                    player.releaseMissile(missiles, pane);
-                    player.setReleaseMissilePressed(false);
+                checkUserInput(scene, this);
+                gameGenerationSystem.work(pane);
+                if (!pause) {
+                    gameBackground.moveGameBackground(getwWidth() / 300);
+                    if (!gameBackground.isNextBackgroundPrepared())
+                        gameBackground.prepareNextBackground(gameGenerationSystem.getNextBackgroundId(gameBackground.getCurrentBackgroundId()));
+                    player.move();
+                    if (player.isReleaseMissilePressed() && player.getAmmunition() > 0) {
+                        player.releaseMissile(missiles, pane, wWidth / 200, wHeight / 100);
+                        player.setReleaseMissilePressed(false);
+                    }
+                    player.reload(missiles, pane);
+                    enemyPlanes.attackPlayer(player, missiles, pane, wWidth / 200, wHeight / 100);
+                    missiles.checkCollisions(bombs, enemyPlanes, player, pane);
+                    missiles.moveObstacles( pane);
+                    enemyPlanes.moveObstacles(pane);
+                    bombs.moveObstacles(pane);
+                    bombs.checkCollisions(player, enemyPlanes, pane);
+                    enemyPlanes.checkCollisions(player, pane);
+                    distanceCounter.increaseDistanceTravelled(0.001);
                 }
-                missiles.moveObstacles(wHeight / 400, wWidth / 250, pane);
-                enemyPlanes.moveObstacles(wHeight / 400, wWidth / 300, pane);
-                missiles.checkCollisions(bombs, enemyPlanes, player, pane);
-                bombs.moveObstacles(wHeight / 400, 0, pane);
-                bombs.checkCollisions(player, enemyPlanes, pane);
-                enemyPlanes.checkCollisions(player, pane);
             }
         };
         timer.start();
@@ -82,28 +80,35 @@ public class Game {
         primaryStage.centerOnScreen();
     }
 
-    private void checkUserInput(Scene scene){
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP)
-                player.getMovingVector().up = true;
-            if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN)
-                player.getMovingVector().down = true;
-            if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT)
-                player.getMovingVector().left = true;
-            if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT)
-                player.getMovingVector().right = true;
-        });
+    private void checkUserInput(Scene scene, AnimationTimer timer){
+        if (!pause) {
+            scene.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP)
+                    player.getMovingVector().up = true;
+                if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN)
+                    player.getMovingVector().down = true;
+                if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT)
+                    player.getMovingVector().left = true;
+                if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT)
+                    player.getMovingVector().right = true;
+            });
+        }
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP)
-                player.getMovingVector().up = false;
-            if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN)
-                player.getMovingVector().down = false;
-            if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT)
-                player.getMovingVector().left = false;
-            if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT)
-                player.getMovingVector().right = false;
-            if (event.getCode() == KeyCode.SPACE)
-                player.setReleaseMissilePressed(true);
+            if (!pause) {
+                if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP)
+                    player.getMovingVector().up = false;
+                if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN)
+                    player.getMovingVector().down = false;
+                if (event.getCode() == KeyCode.A || event.getCode() == KeyCode.LEFT)
+                    player.getMovingVector().left = false;
+                if (event.getCode() == KeyCode.D || event.getCode() == KeyCode.RIGHT)
+                    player.getMovingVector().right = false;
+                if (event.getCode() == KeyCode.SPACE)
+                    player.setReleaseMissilePressed(true);
+            }
+            if (event.getCode() == KeyCode.ESCAPE){
+                pause = !pause;
+            }
         });
     }
 

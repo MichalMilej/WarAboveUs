@@ -1,5 +1,6 @@
 package main;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import obstacles.Missiles;
@@ -9,18 +10,24 @@ import java.util.ArrayList;
 public class Player extends InteractiveGraphicThing {
     private ImageOfObject imageOfPlayer;
     private int ammunition;
+    private int maxAmmunition;
     private ArrayList<ImageView> ammunitionNumberDisplay = new ArrayList<>();
     private boolean releaseMissilePressed;
+    private double timerForGettingAmmunition;
+    private double reloadOneBulletTimeInMilliseconds;
 
-    public Player(int playerImageIndex, Missiles missiles, int ammunition){
+    public Player(int playerImageIndex, Missiles missiles, int ammunition, double reloadOneBulletTimeInMilliseconds, Pane pane){
         if (playerImageIndex == 0)
             imageOfPlayer = new ImageOfObject("images/planes/303Division.png");
 
         this.ammunition = ammunition;
+        this.maxAmmunition = ammunition;
         // Preparing Graphical display of ammunition number
         for (int i = 0; i < ammunition; i++){
-            createMissileImageView(missiles);
+            createMissileImageView(missiles, pane);
         }
+
+        this.reloadOneBulletTimeInMilliseconds = reloadOneBulletTimeInMilliseconds;
 
         releaseMissilePressed = false;
         setImageView(imageOfPlayer.getImage());
@@ -31,12 +38,8 @@ public class Player extends InteractiveGraphicThing {
         pane.getChildren().add(getImageView());
     }
 
-    public void addAmmunitionNumberDisplayToPane(Pane pane){
-        for (int i = 0; i < ammunitionNumberDisplay.size(); i++)
-            pane.getChildren().add(ammunitionNumberDisplay.get(i));
-    }
 
-    private void createMissileImageView(Missiles missiles){
+    private void createMissileImageView(Missiles missiles, Pane pane){
         ammunitionNumberDisplay.add(new ImageView(missiles.getImagesOfObstacles().get(0).getImage()));
         int index = ammunitionNumberDisplay.size() - 1;
         if (index == 0)
@@ -45,6 +48,7 @@ public class Player extends InteractiveGraphicThing {
             ammunitionNumberDisplay.get(index).setX(ammunitionNumberDisplay.get(index-1).getX() + Game.getwWidth() / 60);
         ammunitionNumberDisplay.get(index).setY(
                 Game.getwHeight() - Game.getwHeight() / 25 - ammunitionNumberDisplay.get(index).getImage().getHeight());
+        pane.getChildren().add(ammunitionNumberDisplay.get(index));
     }
 
     public void setStartingPosition(){
@@ -69,12 +73,12 @@ public class Player extends InteractiveGraphicThing {
         setImageViewPosition(getImageView().getX() + x, getImageView().getY() + y);
     }
 
-    public void releaseMissile(Missiles missiles, Pane pane){
+    public void releaseMissile(Missiles missiles, Pane pane, double horizontalSpeed, double verticalSpeed){
         double x = getImageView().getX() + getImageView().getImage().getWidth();
         double y = getImageView().getY() + getImageView().getImage().getHeight() - getImageView().getImage().getHeight() / 10;
 
         missiles.addObstacle(x, y, 1,
-                new MovingVector(false, true, false, false));
+                new MovingVector(false, true, false, false), horizontalSpeed, verticalSpeed, 1);
 
         pane.getChildren().add(missiles.getObjectsOfObstacles().getLast().getImageView());
 
@@ -82,6 +86,18 @@ public class Player extends InteractiveGraphicThing {
         ammunitionNumberDisplay.remove(ammunitionNumberDisplay.size() - 1);
 
         ammunition--;
+        if (timerForGettingAmmunition == 0)
+            timerForGettingAmmunition = System.currentTimeMillis();
+    }
+
+    public void reload(Missiles missiles, Pane pane){
+        if (ammunition < maxAmmunition) {
+            if (System.currentTimeMillis() - timerForGettingAmmunition >= reloadOneBulletTimeInMilliseconds) {
+                createMissileImageView(missiles, pane);
+                ammunition++;
+                timerForGettingAmmunition = System.currentTimeMillis();
+            }
+        }
     }
 
     private boolean isPossible(double x, double y){
@@ -94,10 +110,6 @@ public class Player extends InteractiveGraphicThing {
             return false;
 
         return true;
-    }
-
-    public void setAmmunition(int ammunition) {
-        this.ammunition = ammunition;
     }
 
     public int getAmmunition() {

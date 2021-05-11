@@ -20,12 +20,15 @@ public class ManagementSystem extends Application{
         String musicPath = "sounds/music/menu_music.mp3";
         Media media = new Media(new File(musicPath).toURI().toString());
         musicMediaPlayer = new MediaPlayer(media);
-        musicMediaPlayer.setVolume(0.5);
+        musicMediaPlayer.setVolume(0.4);
         musicMediaPlayer.play();
 
         primaryStage.setResizable(false);
         Menu menu = new Menu();
         menu.showMenu(primaryStage);
+
+        //Game game = new Game();
+        //game.startGame(primaryStage);
 
     }
 

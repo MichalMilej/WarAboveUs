@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 import main.Player;
 
 public class Missiles extends Obstacles {
+
     public Missiles(){
         addImageOfObstacle("images/missiles/Anti-aircraft Missile 1 up.png");
         addImageOfObstacle("images/missiles/Anti-aircraft Missile 1 right.png");
@@ -18,11 +19,12 @@ public class Missiles extends Obstacles {
         for (int i = 0; i < objectsOfObstacles.size(); i++){
             targetHit = false;
             // Every missile have 9 hit points
+            multiply = 0.3d;
             for (int j = 0; j < 9; j++){
                 if ((j+1) % 3 == 0)
                     multiply += 0.3d;
                 x =  objectsOfObstacles.get(i).getImageView().getX() +
-                        multiply * objectsOfObstacles.get(i).getImageView().getImage().getWidth();
+                        (multiply * objectsOfObstacles.get(i).getImageView().getImage().getWidth());
                 if (j < 3){
                     y = objectsOfObstacles.get(i).getImageView().getY() +
                             objectsOfObstacles.get(i).getImageView().getImage().getHeight() / 3;
@@ -54,11 +56,14 @@ public class Missiles extends Obstacles {
                                 x <= enemyPlane.getImageView().getX() + enemyPlane.getImageView().getImage().getWidth() &&
                                 y >= enemyPlane.getImageView().getY() &&
                                 y <= enemyPlane.getImageView().getY() + enemyPlane.getImageView().getImage().getHeight()) {
-                            // Remove from GUI
-                            pane.getChildren().remove(enemyPlane.getImageView());
+                            if (enemyPlanes.getObstacleHealthPoints().get(k) == 1) {
+                                pane.getChildren().remove(enemyPlane.getImageView());
+                                enemyPlanes.getObstacleHealthPoints().remove(k);
+                                enemyPlanes.getObjectsOfObstacles().remove(k);
+                            }else{
+                                enemyPlanes.decreaseHealthPoints(k);
+                            }
                             pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
-                            // Remove from array
-                            enemyPlanes.getObjectsOfObstacles().remove(k);
                             getObjectsOfObstacles().remove(i);
                             targetHit = true;
                             break;
@@ -90,9 +95,9 @@ public class Missiles extends Obstacles {
                         if (k != i) {
                             Obstacle missile = getObjectsOfObstacles().get(k);
                             if (    x >= missile.getImageView().getX() &&
-                                    x <= missile.getImageView().getX() + missile.getImageView().getImage().getWidth() &&
+                                    x <= (missile.getImageView().getX() + missile.getImageView().getImage().getWidth()) &&
                                     y >= missile.getImageView().getY() &&
-                                    y <= missile.getImageView().getY() + missile.getImageView().getImage().getHeight()) {
+                                    y <= (missile.getImageView().getY() + missile.getImageView().getImage().getHeight())) {
                                 // Remove from GUI
                                 pane.getChildren().remove(missile.getImageView());
                                 pane.getChildren().remove(getObjectsOfObstacles().get(i).getImageView());
@@ -105,7 +110,7 @@ public class Missiles extends Obstacles {
                         }
                     }
                 }
-                if (targetHit)
+                   if (targetHit)
                     break;
             }
         }
