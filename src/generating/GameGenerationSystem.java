@@ -25,7 +25,6 @@ public class GameGenerationSystem {
 
     public void work(Pane pane){
         if (allObstaclesBehind()){
-            
             double difficulty;
             if (distanceTravelled < 20)
                 difficulty = distanceTravelled * 10;
@@ -49,17 +48,17 @@ public class GameGenerationSystem {
                 }
                 case 3:{
                     generateEnemyPlanes(random.nextInt(20) + 5, PlanesComposition.RANDOM,  1, random.nextInt(3),
-                            pane, Game.getwWidth() / 700 - difficulty, Game.getwHeight() / (random.nextInt(200) + 400 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(300) + 400 - difficulty), Game.getwHeight() / (random.nextInt(200) + 400 - difficulty));
                     break;
                 }
                 case 4:{
                     generateEnemyPlanes(random.nextInt(2) + 2, PlanesComposition.SQUADRON, random.nextInt(3) + 4, random.nextInt(3),
-                            pane, Game.getwWidth() / random.nextInt(300) + 300 - difficulty, Game.getwHeight() / (random.nextInt(100) + 250 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(300) + 250 - difficulty), Game.getwHeight() / (random.nextInt(100) + 250 - difficulty));
                     break;
                 }
                 case 5:{
                     generateEnemyPlanes(random.nextInt(3) + 3, PlanesComposition.KEY, random.nextInt(3) + 2, random.nextInt(3),
-                            pane, Game.getwWidth() / random.nextInt(300) + 300 - difficulty, Game.getwHeight() / (random.nextInt(100) + 300 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(300) + 250) - difficulty, Game.getwHeight() / (random.nextInt(100) + 300 - difficulty));
                     break;
                 }
             }

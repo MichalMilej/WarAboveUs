@@ -1,6 +1,7 @@
 package main;
 
 import background.GameBackground;
+import effect.Explosions;
 import generating.BombsComposition;
 import generating.GameGenerationSystem;
 import generating.PlanesComposition;
@@ -39,6 +40,8 @@ public class Game {
         EnemyPlanes enemyPlanes = new EnemyPlanes();
         Missiles missiles = new Missiles();
 
+        Explosions explosions = new Explosions();
+
         player = new Player(0, missiles, 5, 3000, pane);
         player.addPlayerToPane(pane);
 
@@ -63,12 +66,14 @@ public class Game {
                     }
                     player.reload(missiles, pane);
                     enemyPlanes.attackPlayer(player, missiles, pane, wWidth / 200, wHeight / 100);
-                    missiles.checkCollisions(bombs, enemyPlanes, player, pane);
+                    missiles.checkCollisions(bombs, enemyPlanes, player, pane, explosions);
                     missiles.moveObstacles( pane);
                     enemyPlanes.moveObstacles(pane);
                     bombs.moveObstacles(pane);
                     bombs.checkCollisions(player, enemyPlanes, pane);
                     enemyPlanes.checkCollisions(player, pane);
+                    explosions.manageExplosions(pane);
+                    explosions.moveExplosions();
                     distanceCounter.increaseDistanceTravelled(0.001);
                 }
             }

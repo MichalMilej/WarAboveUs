@@ -8,8 +8,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EnemyPlanes extends Obstacles {
+    private final String armedPlaneName = "enemy_plane_1_armed.png";
+    private double timer = 0;
+    private double shootingBreakInMilliseconds = 500;
+    private int enemyMissileIndex = 2;
+
     public EnemyPlanes(){
-        addImageOfObstacle("images/planes/enemy_plane_1.png");
+        addImageOfObstacle("images/planes/" + armedPlaneName);
         addImageOfObstacle("images/planes/enemy_plane_2.png");
         addImageOfObstacle("images/planes/enemy_plane_3.png");
     }
@@ -50,25 +55,45 @@ public class EnemyPlanes extends Obstacles {
     }
 
     public void attackPlayer(Player player, Missiles missiles, Pane pane, double horizontalSpeed, double verticalSpeed){
+        if (System.currentTimeMillis() - timer <= shootingBreakInMilliseconds)
+            return;
+        double playerPosX = player.getImageView().getX();
         double playerPosY = player.getImageView().getY();
         double playerHeight = player.getImageView().getImage().getHeight();
         for (int i = 0; i < objectsOfObstacles.size(); i++){
-            double enemyPosY = getObjectsOfObstacles().get(i).getImageView().getY();
-            double enemyPlaneHeight = getObjectsOfObstacles().get(i).getImageView().getImage().getHeight();
-            if (playerPosY >= enemyPosY * 0.9 && playerPosY + playerHeight <= enemyPosY + enemyPlaneHeight * 1.1){
-                ;
+            if (objectsOfObstacles.get(i).getImageView().getImage() != getImagesOfObstacles().get(0).getImage())
+                continue;
+            double x = objectsOfObstacles.get(i).getImageView().getX();
+            double y = objectsOfObstacles.get(i).getImageView().getY() + objectsOfObstacles.get(i).getImageView().getImage().getHeight() * 0.7;
+            if (x > playerPosX){
+                if (y >= playerPosY && y <= playerPosY + playerHeight) {
+                    boolean lineOfFireClear = true;
+                    for (int j = 0; j < objectsOfObstacles.size(); j++){ // Check if line of fire is clear
+                        if (i == j)
+                            continue;
+                        if (getObjectsOfObstacles().get(j).getImageView().getX() < x){
+                            double planeYPos = getObjectsOfObstacles().get(j).getImageView().getY();
+                            double planeHeight = getObjectsOfObstacles().get(j).getImageView().getImage().getHeight();
+                            if (planeYPos <= y && planeYPos + planeHeight >= y){
+                                lineOfFireClear = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (lineOfFireClear) {
+                        releaseMissile(missiles, i, new MovingVector(true, false, false, false), pane, horizontalSpeed, verticalSpeed);
+                        timer = System.currentTimeMillis();
+                    }
+                }
             }
         }
     }
 
     public void releaseMissile(Missiles missiles, int planeIndex, MovingVector movingVector, Pane pane, double horizontalSpeed, double verticalSpeed){
-        Obstacle enemyPlane = getObjectsOfObstacles().get(planeIndex);
-        double x = enemyPlane.getImageView().getX() - missiles.getImagesOfObstacles().get(2).getImage().getWidth() * 1.2;
-        double y = enemyPlane.getImageView().getY() +
-                enemyPlane.getImageView().getImage().getHeight() -
-                enemyPlane.getImageView().getImage().getHeight() / 10;
+        double x = getObjectsOfObstacles().get(planeIndex).getImageView().getX() - missiles.getImagesOfObstacles().get(enemyMissileIndex).getImage().getWidth() * 1.4;
+        double y = getObjectsOfObstacles().get(planeIndex).getImageView().getY() + getObjectsOfObstacles().get(planeIndex).getImageView().getImage().getHeight() * 0.7;
 
-        missiles.addObstacle(x, y, 2, movingVector, horizontalSpeed, verticalSpeed, 1);
+        missiles.addObstacle(x, y, enemyMissileIndex, movingVector, horizontalSpeed, verticalSpeed, 1);
         pane.getChildren().add(missiles.getObjectsOfObstacles().getLast().getImageView());
     }
 }
