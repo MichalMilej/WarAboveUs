@@ -1,5 +1,6 @@
 package obstacles;
 
+import effect.Explosions;
 import javafx.scene.layout.Pane;
 import main.MovingVector;
 import main.Player;
@@ -19,7 +20,7 @@ public class EnemyPlanes extends Obstacles {
         addImageOfObstacle("images/planes/enemy_plane_3.png");
     }
 
-    public void checkCollisions(Player player, Pane pane) { // With player
+    public void checkCollisions(Player player, Pane pane, Explosions explosions) { // With player
 
         for (int i = 0; i < objectsOfObstacles.size(); i++) {
             // Enemy plane parameters
@@ -45,9 +46,13 @@ public class EnemyPlanes extends Obstacles {
                         x <= player.getImageView().getX() + player.getImageView().getImage().getWidth() &&
                         y >= player.getImageView().getY() &&
                         y <= player.getImageView().getY() + player.getImageView().getImage().getHeight()){
+                    double explosionX = objectsOfObstacles.get(i).getImageView().getX() + objectsOfObstacles.get(i).getImageView().getImage().getWidth() / 2;
+                    double explosionY = objectsOfObstacles.get(i).getImageView().getY() + objectsOfObstacles.get(i).getImageView().getImage().getHeight() / 2;
+                    explosions.createExplosion(explosionX, explosionY, 0, 3, pane, 0, 0);
                     pane.getChildren().remove(objectsOfObstacles.get(i).getImageView());
                     objectsOfObstacles.remove(i);
                     i--;
+                    player.playerHit(explosions, pane);
                     break;
                 }
             }

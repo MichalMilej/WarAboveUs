@@ -1,24 +1,43 @@
 package main;
 
+import effect.Explosions;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import obstacles.Missiles;
+import scores.DistanceCounter;
 
 import java.util.ArrayList;
 
 public class Player extends InteractiveGraphicThing {
     private ImageOfObject imageOfPlayer;
+    private ImageOfObject[] imagesOfSmoke;
+
+    private ImageView smokeImageView;
+    private int currentSmokeId = -1; // At start -1 because nothing set
+    private double timer = System.currentTimeMillis();
+    private final double howManyMillisecondsForChangingAnimation = 600;
+
     private int ammunition;
     private int maxAmmunition;
     private ArrayList<ImageView> ammunitionNumberDisplay = new ArrayList<>();
+
     private boolean releaseMissilePressed;
     private double timerForGettingAmmunition;
     private double reloadOneBulletTimeInMilliseconds;
 
+    private int hp;
+
     public Player(int playerImageIndex, Missiles missiles, int ammunition, double reloadOneBulletTimeInMilliseconds, Pane pane){
         if (playerImageIndex == 0)
             imageOfPlayer = new ImageOfObject("images/planes/303Division.png");
+        imagesOfSmoke = new ImageOfObject[3];
+        imagesOfSmoke[0] = new ImageOfObject("images/smoke/smoke1.png");
+        imagesOfSmoke[1] = new ImageOfObject("images/smoke/smoke2.png");
+        imagesOfSmoke[2] = new ImageOfObject("images/smoke/smoke3.png");
+
+        smokeImageView = new ImageView();
+        smokeImageView.setVisible(false);
 
         this.ammunition = ammunition;
         this.maxAmmunition = ammunition;
@@ -29,15 +48,52 @@ public class Player extends InteractiveGraphicThing {
 
         this.reloadOneBulletTimeInMilliseconds = reloadOneBulletTimeInMilliseconds;
 
+        this.hp = 2;
+
         releaseMissilePressed = false;
         setImageView(imageOfPlayer.getImage());
         setStartingPosition();
-    }
-
-    public void addPlayerToPane(Pane pane){
+        pane.getChildren().add(smokeImageView);
         pane.getChildren().add(getImageView());
     }
 
+    public void playerHit(Explosions explosions, Pane pane){
+        if (hp == 2){
+            hp--;
+            smokeImageView.setVisible(true);
+        }else if (hp == 1){
+            double x = getImageView().getX() + getImageView().getImage().getWidth() / 2;
+            double y = getImageView().getY() + getImageView().getImage().getHeight() / 2;
+            explosions.createExplosion(x, y, 0, 3, pane, 0, 0);
+            getImageView().setX(-500);
+            getImageView().setVisible(false);
+            smokeImageView.setVisible(false);
+            for (int i = 0; i < ammunitionNumberDisplay.size(); i++){
+                pane.getChildren().remove(ammunitionNumberDisplay.get(i));
+                ammunitionNumberDisplay.remove(i--);
+            }
+            hp--;
+        }
+    }
+
+    public void animateSmoke(){
+        if (smokeImageView.isVisible() && System.currentTimeMillis() - timer >= howManyMillisecondsForChangingAnimation) {
+            if (currentSmokeId == 2 || currentSmokeId < 0){
+                smokeImageView.setImage(imagesOfSmoke[0].getImage());
+                currentSmokeId = 0;
+            }
+            else if (currentSmokeId == 0) {
+                smokeImageView.setImage(imagesOfSmoke[1].getImage());
+                currentSmokeId = 1;
+            }else if (currentSmokeId == 1){
+                smokeImageView.setImage(imagesOfSmoke[2].getImage());
+                currentSmokeId = 2;
+            }
+            smokeImageView.setX(getImageView().getX() + getImageView().getImage().getWidth() / 3 - smokeImageView.getImage().getWidth() / 2);
+            smokeImageView.setY(getImageView().getY() + getImageView().getImage().getHeight() / 3 - smokeImageView.getImage().getHeight() / 2);
+            timer = System.currentTimeMillis();
+        }
+    }
 
     private void createMissileImageView(Missiles missiles, Pane pane){
         ammunitionNumberDisplay.add(new ImageView(missiles.getImagesOfObstacles().get(0).getImage()));
@@ -71,6 +127,10 @@ public class Player extends InteractiveGraphicThing {
             x = rightSpeed; // 60 times per second
 
         setImageViewPosition(getImageView().getX() + x, getImageView().getY() + y);
+        if (hp < 2){
+            smokeImageView.setX(smokeImageView.getX() + x);
+            smokeImageView.setY(smokeImageView.getY() + y);
+        }
     }
 
     public void releaseMissile(Missiles missiles, Pane pane, double horizontalSpeed, double verticalSpeed){
@@ -114,6 +174,10 @@ public class Player extends InteractiveGraphicThing {
 
     public int getAmmunition() {
         return ammunition;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
     public boolean isReleaseMissilePressed() {

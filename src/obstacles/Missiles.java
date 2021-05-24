@@ -53,6 +53,7 @@ public class Missiles extends Obstacles {
                     getObjectsOfObstacles().remove(i);
                     startingExplosionImageIndex = 0;
                     endingExplosionImageIndex = 1;
+                    player.playerHit(explosions, pane);
                     targetHit = true;
                 }
                 // Checking collisions with enemy planes
