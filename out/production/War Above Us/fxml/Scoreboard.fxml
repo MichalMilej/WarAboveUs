@@ -17,10 +17,11 @@
             <Font name="Berlin Sans FB" size="32.0" />
          </font>
       </Text>
-      <TableView layoutX="280.0" layoutY="100.0" prefHeight="280.0" prefWidth="400.0">
+      <TableView fx:id="scoresTableView" layoutX="280.0" layoutY="100.0" prefHeight="280.0" prefWidth="400.0" >
         <columns>
-          <TableColumn prefWidth="200.0" text="Player" />
-          <TableColumn prefWidth="200.0" text="Score" />
+            <TableColumn fx:id="position" prefWidth="50.0" text="Place" style="-fx-alignment: center;"/>
+            <TableColumn fx:id="nameTableColumn"  prefWidth="200.0" text="Player" style="-fx-alignment: center;"/>
+            <TableColumn fx:id="scoreTableColumn" prefWidth="200.0" text="Score" style="-fx-alignment: center;"/>
         </columns>
       </TableView>
        <Button layoutX="280.0" layoutY="400.0" mnemonicParsing="false" onAction="#backToTheMainScene" prefHeight="75.0" prefWidth="400.0" text="Back">

@@ -17,7 +17,7 @@ public class ManagementSystem extends Application{
 
     @Override
     public void start(Stage primaryStage){
-        /*String musicPath = "sounds/music/menu_music.mp3";
+        String musicPath = "sounds/music/menu_music.mp3";
         Media media = new Media(new File(musicPath).toURI().toString());
         musicMediaPlayer = new MediaPlayer(media);
         musicMediaPlayer.setVolume(0.4);
@@ -26,10 +26,6 @@ public class ManagementSystem extends Application{
         primaryStage.setResizable(false);
         Menu menu = new Menu();
         menu.showMenu(primaryStage);
-*/
-        Game game = new Game();
-        game.startGame(primaryStage);
-
     }
 
     public static MediaPlayer getMusicMediaPlayer() {

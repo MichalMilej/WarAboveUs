@@ -59,7 +59,7 @@ public class EnemyPlanes extends Obstacles {
         }
     }
 
-    public void attackPlayer(Player player, Missiles missiles, Pane pane, double horizontalSpeed, double verticalSpeed){
+    public void attackPlayer(Player player, Missiles missiles, Pane pane){
         if (System.currentTimeMillis() - timer <= shootingBreakInMilliseconds)
             return;
         double playerPosX = player.getImageView().getX();
@@ -86,7 +86,8 @@ public class EnemyPlanes extends Obstacles {
                         }
                     }
                     if (lineOfFireClear) {
-                        releaseMissile(missiles, i, new MovingVector(true, false, false, false), pane, horizontalSpeed, verticalSpeed);
+                        releaseMissile(missiles, i, new MovingVector(true, false, false, false), pane,
+                                objectsOfObstacles.get(i).getHorizontalSpeed() * 1.8, objectsOfObstacles.get(i).getVerticalSpeed());
                         timer = System.currentTimeMillis();
                     }
                 }

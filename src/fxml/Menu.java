@@ -1,9 +1,12 @@
 package fxml;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.Game;
 
 import java.io.IOException;
 
@@ -22,5 +25,6 @@ public class Menu{
         primaryStage.setScene(scene);
         primaryStage.setTitle("War Above Us");
         primaryStage.show();
+        primaryStage.centerOnScreen();
     }
 }

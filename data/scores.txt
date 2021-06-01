@@ -1,0 +1,5 @@
+Michael:0.21
+Paulina:0.24
+Mikolaj:0.08
+Janusz:0.12
+Michal:1.65

@@ -3,6 +3,7 @@ package main;
 import background.GameBackground;
 import dialogs.GameOver;
 import effect.Explosions;
+import fxml.Menu;
 import generating.GameGenerationSystem;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -14,16 +15,15 @@ import obstacles.EnemyPlanes;
 import obstacles.Missiles;
 import scores.DistanceCounter;
 import dialogs.PauseText;
-
-import java.util.Random;
+import scores.ScoresSavingSystem;
 
 
 public class Game {
     private static double wWidth;
     private static double wHeight;
     private Player player;
-    private Random random;
     private PauseText pauseText;
+    private boolean wasScoreSaved = false;
 
     public void startGame(Stage primaryStage){
         primaryStage.setTitle("War Above Us");
@@ -59,7 +59,7 @@ public class Game {
                 checkUserInput(scene, this);
                 if (!pauseText.isVisible()) {
                     gameGenerationSystem.work(pane);
-                    gameBackground.moveGameBackground(getwWidth() / 300);
+                    gameBackground.moveGameBackground(getwWidth() / 600);
                     if (!gameBackground.isNextBackgroundPrepared())
                         gameBackground.prepareNextBackground(gameGenerationSystem.getNextBackgroundId(gameBackground.getCurrentBackgroundId()));
                     player.move();
@@ -70,7 +70,7 @@ public class Game {
                     if (player.getHp() > 0)
                         player.reload(missiles, pane);
                     player.animateSmoke();
-                    enemyPlanes.attackPlayer(player, missiles, pane, wWidth / 200, wHeight / 100);
+                    enemyPlanes.attackPlayer(player, missiles, pane);
                     missiles.checkCollisions(bombs, enemyPlanes, player, pane, explosions);
                     missiles.moveObstacles( pane);
                     enemyPlanes.moveObstacles(pane);
@@ -79,10 +79,31 @@ public class Game {
                     enemyPlanes.checkCollisions(player, pane, explosions);
                     explosions.manageExplosions(pane);
                     explosions.moveExplosions();
-                    if (player.getHp() == 0)
-                        gameOver.showGameOver();
                     if (player.getHp() > 0)
                         distanceCounter.increaseDistanceTravelled(0.001);
+
+                    if (player.getHp() <= 0 && !gameOver.isGameOverShowed()) {
+                        gameOver.showGameOver();
+                    }
+                    if (gameOver.isGameOverShowed()) {
+                        if (gameOver.isSaveDistance()) {
+                            if (!wasScoreSaved && gameOver.getPlayerName().length() > 0){
+                                ScoresSavingSystem scoresSavingSystem = new ScoresSavingSystem();
+                                scoresSavingSystem.saveDistance(gameOver.getPlayerName(), distanceCounter.getDistanceTravelled());
+                                wasScoreSaved = true;
+                            }
+                        }
+                        if (gameOver.isReturnToMenu()) {
+                            Menu menu = new Menu();
+                            menu.showMenu(primaryStage);
+                            this.stop();
+                        }
+                        if (gameOver.isRestartGame()) {
+                            Game game = new Game();
+                            game.startGame(primaryStage);
+                            this.stop();
+                        }
+                    }
                 }
             }
         };

@@ -33,32 +33,32 @@ public class GameGenerationSystem {
             switch (random.nextInt(6)){
                 case 0: {
                     generateBombs(random.nextInt(2) + 4, BombsComposition.FLAT, random.nextInt(5) + 3, 0, pane,
-                            Game.getwWidth() / 1500 - difficulty, Game.getwHeight() / (random.nextInt(200) + 400 - difficulty));
+                            Game.getwWidth() / 1500 - difficulty, Game.getwHeight() / (random.nextInt(50) + 400 - difficulty));
                     break;
                 }
                 case 1: {
                     generateBombs(random.nextInt(2) + 3, BombsComposition.STAIRS, random.nextInt(5) + 1, 0, pane,
-                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(100) + 300 - difficulty));
+                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 400 - difficulty));
                     break;
                 }
                 case 2: {
                     generateBombs(random.nextInt(2) + 3, BombsComposition.UPRIGHT, random.nextInt(5) + 6, 0, pane,
-                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(100) + 250 - difficulty));
+                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 400 - difficulty));
                     break;
                 }
                 case 3:{
                     generateEnemyPlanes(random.nextInt(20) + 5, PlanesComposition.RANDOM,  1, random.nextInt(3),
-                            pane, Game.getwWidth() / (random.nextInt(300) + 400 - difficulty), Game.getwHeight() / (random.nextInt(200) + 400 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(50) + 450 - difficulty), Game.getwHeight() / (random.nextInt(100) + 300 - difficulty));
                     break;
                 }
                 case 4:{
                     generateEnemyPlanes(random.nextInt(2) + 2, PlanesComposition.SQUADRON, random.nextInt(3) + 4, random.nextInt(3),
-                            pane, Game.getwWidth() / (random.nextInt(300) + 250 - difficulty), Game.getwHeight() / (random.nextInt(100) + 250 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(50) + 400 - difficulty), Game.getwHeight() / (random.nextInt(50) + 250 - difficulty));
                     break;
                 }
                 case 5:{
                     generateEnemyPlanes(random.nextInt(3) + 3, PlanesComposition.KEY, random.nextInt(3) + 2, random.nextInt(3),
-                            pane, Game.getwWidth() / (random.nextInt(300) + 250) - difficulty, Game.getwHeight() / (random.nextInt(100) + 300 - difficulty));
+                            pane, Game.getwWidth() / (random.nextInt(50) + 400 - difficulty), Game.getwHeight() / (random.nextInt(50) + 300 - difficulty));
                     break;
                 }
             }

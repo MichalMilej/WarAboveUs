@@ -76,8 +76,8 @@ public class MenuController implements Initializable {
     public void playGame(ActionEvent actionEvent)throws IOException{
         Stage primaryStage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
 
-        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING)
-            ManagementSystem.changeMusicMediaPlayerStatus();
+        //if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING)
+            //ManagementSystem.changeMusicMediaPlayerStatus();
 
         Game game = new Game();
         game.startGame(primaryStage);
