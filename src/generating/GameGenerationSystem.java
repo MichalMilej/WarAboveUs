@@ -38,12 +38,12 @@ public class GameGenerationSystem {
                 }
                 case 1: {
                     generateBombs(random.nextInt(2) + 3, BombsComposition.STAIRS, random.nextInt(5) + 1, 0, pane,
-                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 400 - difficulty));
+                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 300 - difficulty));
                     break;
                 }
                 case 2: {
                     generateBombs(random.nextInt(2) + 3, BombsComposition.UPRIGHT, random.nextInt(5) + 6, 0, pane,
-                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 400 - difficulty));
+                            Game.getwWidth() / 1200 - difficulty, Game.getwHeight() / (random.nextInt(50) + 300 - difficulty));
                     break;
                 }
                 case 3:{
