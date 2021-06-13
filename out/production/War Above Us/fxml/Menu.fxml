@@ -8,16 +8,28 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #708090;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fxml.MenuController">
+   <ImageView fitWidth="960" fitHeight="540">
+      <image>
+         <Image url="@menu background.png" />
+      </image>
+   </ImageView>
    <children>
-      <Button alignment="CENTER" layoutX="280.0" layoutY="130.0" mnemonicParsing="false" onAction="#playGame" prefHeight="75.0" prefWidth="400.0" text="Play">
+      <Button alignment="CENTER" layoutX="280.0"
+              layoutY="130.0" mnemonicParsing="false" onAction="#playGame"
+              prefHeight="75.0" prefWidth="400.0" text="Play"
+              style="-fx-background-color: transparent; -fx-text-fill: Aqua; -fx-font-size: 40; -fx-font-weight: bold;" >
          <font>
             <Font name="Berlin Sans FB" size="20.0" />
          </font></Button>
-      <Button fx:id="musicButton" alignment="CENTER" layoutX="280.0" layoutY="225.0" mnemonicParsing="false" onAction="#changeMusicStatus" prefHeight="75.0" prefWidth="400.0" text="Music: ON">
+      <Button fx:id="musicButton" alignment="CENTER" layoutX="280.0" layoutY="225.0" mnemonicParsing="false" onAction="#changeMusicStatus"
+              prefHeight="75.0" prefWidth="400.0" text="Music: on"
+              style="-fx-background-color: transparent; -fx-text-fill: Aqua; -fx-font-size: 40; -fx-font-weight: bold;">
          <font>
             <Font name="Berlin Sans FB" size="20.0" />
          </font></Button>
-      <Button alignment="CENTER" layoutX="280.0" layoutY="325.0" mnemonicParsing="false" onAction="#showScoreboards" prefHeight="75.0" prefWidth="400.0" text="Scoreboard">
+      <Button alignment="CENTER" layoutX="280.0" layoutY="325.0" mnemonicParsing="false" onAction="#showScoreboards"
+              prefHeight="75.0" prefWidth="400.0" text="Scoreboard"
+              style="-fx-background-color: transparent; -fx-text-fill: Aqua; -fx-font-size: 40; -fx-font-weight: bold;">
          <font>
             <Font name="Berlin Sans FB" size="20.0" />
          </font></Button>

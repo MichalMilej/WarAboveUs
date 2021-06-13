@@ -3,3 +3,7 @@ Paulina:0.24
 Mikolaj:0.08
 Janusz:0.12
 Michal:1.65
+Lotnik:3.36
+Johny:2.9
+kolki:0.2
+Michaletto:3.95

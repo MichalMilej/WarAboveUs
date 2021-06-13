@@ -34,6 +34,8 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mediaPlayer = ManagementSystem.getMusicMediaPlayer();
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED)
+            musicButton.setText("Music: off");
         volumeSlider.setValue(mediaPlayer.getVolume()*100);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
@@ -47,10 +49,10 @@ public class MenuController implements Initializable {
    @FXML
     public void changeMusicStatus(ActionEvent actionEvent) {
         if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            musicButton.setText("Music: Off");
+            musicButton.setText("Music: off");
         }
         else if (mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-            musicButton.setText("Music: On");
+            musicButton.setText("Music: on");
         }
         ManagementSystem.changeMusicMediaPlayerStatus();
     }
