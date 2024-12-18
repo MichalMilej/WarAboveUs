@@ -1,0 +1,1 @@
+java --module-path "E:\Programy\Java\javafx-sdk-21.0.5\lib" --add-modules=javafx.controls,javafx.fxml,javafx.media,javafx.graphics -jar "War Above Us.jar"

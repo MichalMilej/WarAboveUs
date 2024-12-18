@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #708090;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="225.0" mnemonicParsing="false" onAction="#playSound" prefHeight="75.0" prefWidth="400.0" text="Music: ON">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="130.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="400.0" text="Play">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="320.0" mnemonicParsing="false" onAction="#stopSound" prefHeight="75.0" prefWidth="400.0" text="Music: OFF">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <Button alignment="CENTER" layoutX="280.0" layoutY="415.0" mnemonicParsing="false" onAction="#showScoreboards" prefHeight="75.0" prefWidth="400.0" text="Scoreboards">
+         <font>
+            <Font name="Berlin Sans FB" size="20.0" />
+         </font></Button>
+      <ImageView fitHeight="100.0" fitWidth="720.0" layoutX="120.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@xWwC1617097464.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
